@@ -4,22 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   const { Sequelize } = sequelize;
   // This section contains the fields of your model, mapped to your table's columns.
   // Learn more here: https://docs.forestadmin.com/documentation/v/v6/reference-guide/models/enrich-your-models#declaring-a-new-field-in-a-model
-  const Customers = sequelize.define('customers', {
-    firstname: {
-      type: DataTypes.STRING,
-    },
-    lastname: {
-      type: DataTypes.STRING,
-    },
-    email: {
-      type: DataTypes.STRING,
-    },
-    phone: {
-      type: DataTypes.STRING,
-    },
-    avatar: {
-      type: DataTypes.STRING,
-    },
+  const CustomersSubscriptions = sequelize.define('customersSubscriptions', {
     status: {
       type: DataTypes.STRING,
     },
@@ -29,32 +14,39 @@ module.exports = (sequelize, DataTypes) => {
     updatedAt: {
       type: DataTypes.DATE,
     },
-    stripeId: {
-      type: DataTypes.STRING,
+    startDate: {
+      type: DataTypes.DATE,
+    },
+    endDate: {
+      type: DataTypes.DATE,
+    },
+    monthlyFees: {
+      type: DataTypes.DECIMAL,
     },
   }, {
-    tableName: 'customers',
+    tableName: 'customers_subscriptions',
     underscored: true,
     schema: process.env.DATABASE_SCHEMA,
   });
 
   // This section contains the relationships for this model. See: https://docs.forestadmin.com/documentation/v/v6/reference-guide/relationships#adding-relationships.
-  Customers.associate = (models) => {
-    Customers.hasMany(models.transactions, {
-      foreignKey: {
-        name: 'emitterCustomerIdKey',
-        field: 'emitter_customer_id',
-      },
-      as: 'emitterCustomerTransactions',
-    });
-    Customers.hasMany(models.orders, {
+  CustomersSubscriptions.associate = (models) => {
+    CustomersSubscriptions.belongsTo(models.customers, {
       foreignKey: {
         name: 'customerIdKey',
         field: 'customer_id',
       },
-      as: 'orders',
+      as: 'customer',
+    });
+
+    CustomersSubscriptions.belongsTo(models.subscriptionProducts, {
+      foreignKey: {
+        name: 'productIdKey',
+        field: 'product_id',
+      },
+      as: 'product',
     });
   };
 
-  return Customers;
+  return CustomersSubscriptions;
 };

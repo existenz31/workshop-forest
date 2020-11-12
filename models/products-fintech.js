@@ -4,24 +4,18 @@ module.exports = (sequelize, DataTypes) => {
   const { Sequelize } = sequelize;
   // This section contains the fields of your model, mapped to your table's columns.
   // Learn more here: https://docs.forestadmin.com/documentation/v/v6/reference-guide/models/enrich-your-models#declaring-a-new-field-in-a-model
-  const Customers = sequelize.define('customers', {
-    firstname: {
+  const ProductsFintech = sequelize.define('productsFintech', {
+    label: {
       type: DataTypes.STRING,
     },
-    lastname: {
-      type: DataTypes.STRING,
+    price: {
+      type: DataTypes.DECIMAL,
     },
-    email: {
-      type: DataTypes.STRING,
+    isRecurrent: {
+      type: DataTypes.BOOLEAN,
     },
-    phone: {
-      type: DataTypes.STRING,
-    },
-    avatar: {
-      type: DataTypes.STRING,
-    },
-    status: {
-      type: DataTypes.STRING,
+    isSubscription: {
+      type: DataTypes.BOOLEAN,
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -29,32 +23,21 @@ module.exports = (sequelize, DataTypes) => {
     updatedAt: {
       type: DataTypes.DATE,
     },
-    stripeId: {
-      type: DataTypes.STRING,
-    },
   }, {
-    tableName: 'customers',
+    tableName: 'products_fintech',
     underscored: true,
     schema: process.env.DATABASE_SCHEMA,
   });
 
+  ProductsFintech.addScope('subscriptions', {
+    where: {
+        isSubscription: true
+    }
+  });  
+
   // This section contains the relationships for this model. See: https://docs.forestadmin.com/documentation/v/v6/reference-guide/relationships#adding-relationships.
-  Customers.associate = (models) => {
-    Customers.hasMany(models.transactions, {
-      foreignKey: {
-        name: 'emitterCustomerIdKey',
-        field: 'emitter_customer_id',
-      },
-      as: 'emitterCustomerTransactions',
-    });
-    Customers.hasMany(models.orders, {
-      foreignKey: {
-        name: 'customerIdKey',
-        field: 'customer_id',
-      },
-      as: 'orders',
-    });
+  ProductsFintech.associate = (models) => {
   };
 
-  return Customers;
+  return ProductsFintech;
 };
