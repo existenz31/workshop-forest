@@ -17,15 +17,10 @@ module.exports = (sequelize, DataTypes) => {
     isSubscription: {
       type: DataTypes.BOOLEAN,
     },
-    createdAt: {
-      type: DataTypes.DATE,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-    },
   }, {
     tableName: 'products_fintech',
     underscored: true,
+    timestamps: true,
     schema: process.env.DATABASE_SCHEMA,
   });
 

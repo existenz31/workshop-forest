@@ -1,16 +1,26 @@
 const express = require('express');
-const { PermissionMiddlewareCreator } = require('forest-express-sequelize');
+const { PermissionMiddlewareCreator, RecordCreator } = require('forest-express-sequelize');
 const router = express.Router();
 
 const models = require('../models');
-const collectionName = 'customers';
+const collectionName = 'customersSubscriptions';
 const permissionMiddlewareCreator = new PermissionMiddlewareCreator(`${collectionName}`);
 
 // Create a Record
 router.post(`/${collectionName}`, permissionMiddlewareCreator.create(), (request, response, next) => {
- next();
+  const recordCreator = new RecordCreator(models[collectionName]);
+  recordCreator.deserialize(request.body)
+    .then(async (recordToCreate) => {
+      recordToCreate.status = 'submitted';
+      const plan = await models.subscriptionProducts.findByPk(recordToCreate.product);
+      recordToCreate.monthlyFees = plan.price;
+      return recordCreator.create(recordToCreate)
+    })
+    .then(record => recordCreator.serialize(record))
+    .then(recordSerialized => response.send(recordSerialized))
+    .catch(next);
+//  next();
 });
-
 // Update a Record
 router.put(`/${collectionName}/:recordId`, permissionMiddlewareCreator.update(), (request, response, next) => {
   next();
@@ -46,37 +56,38 @@ router.delete(`/${collectionName}`, permissionMiddlewareCreator.delete(), (reque
   next();
 });
 
-/** 
- * Customers Smart Actions
+/**
+ * Subscriptions Smart Actions
  */
-router.post('/actions/customers/approve', permissionMiddlewareCreator.smartAction(), async (request, response, next) => {
-  const customerId = request.body.data.attributes.ids[0];
-  models.customers.update({ status: 'approved' }, {
+
+router.post('/actions/subscriptions/complete', permissionMiddlewareCreator.smartAction(), async (request, response, next) => {
+  const subscriptionId = request.body.data.attributes.ids[0];
+  models.customersSubscriptions.update({ status: 'completed' }, {
     where: {
-      id: customerId
+      id: subscriptionId
     }
   })
   .then( () => {
     response.send({ 
-      success: 'Customer Approved!',
+      success: 'Subscription Completed!',
      });  
   })
   .catch(next);
 });
 
-router.post('/actions/customers/reject', permissionMiddlewareCreator.smartAction(), async (request, response, next) => {
-  const customerId = request.body.data.attributes.ids[0];
-  models.customers.update({ 
+router.post('/actions/subscriptions/reject', permissionMiddlewareCreator.smartAction(), async (request, response, next) => {
+  const subscriptionId = request.body.data.attributes.ids[0];
+  models.customersSubscriptions.update({ 
     status: 'rejected',
     rejectReason:  request.body.data.attributes.values['Rejection Reason'],
   }, {
     where: {
-      id: customerId
+      id: subscriptionId
     }
   })
   .then( () => {
     response.send({ 
-      success: 'Customer Rejected!',
+      success: 'Subscription Rejected!',
      });  
   })
   .catch(next);

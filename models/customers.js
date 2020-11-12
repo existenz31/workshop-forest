@@ -23,11 +23,8 @@ module.exports = (sequelize, DataTypes) => {
     status: {
       type: DataTypes.STRING,
     },
-    createdAt: {
-      type: DataTypes.DATE,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
+    rejectReason: {
+      type: DataTypes.STRING,
     },
     stripeId: {
       type: DataTypes.STRING,
@@ -35,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     tableName: 'customers',
     underscored: true,
+    timestamps: true,
     schema: process.env.DATABASE_SCHEMA,
   });
 
@@ -53,6 +51,21 @@ module.exports = (sequelize, DataTypes) => {
         field: 'customer_id',
       },
       as: 'orders',
+    });
+    Customers.hasMany(models.customersSubscriptions, {
+      foreignKey: {
+        name: 'customerIdKey',
+        field: 'customer_id',
+      },
+      as: 'subscriptions',
+    });
+    Customers.belongsToMany(models.documents, {
+      through: 'customersDocuments',
+      // foreignKey: {
+      //   name: 'customerIdKey',
+      //   field: 'customer_id',
+      // },
+      as: 'documents',
     });
   };
 

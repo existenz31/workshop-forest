@@ -1,59 +1,48 @@
 const express = require('express');
 const { PermissionMiddlewareCreator } = require('forest-express-sequelize');
-const { orders } = require('../models');
-
 const router = express.Router();
-const permissionMiddlewareCreator = new PermissionMiddlewareCreator('orders');
 
-// This file contains the logic of every route in Forest Admin for the collection orders:
-// - Native routes are already generated but can be extended/overriden - Learn how to extend a route here: https://docs.forestadmin.com/documentation/v/v6/reference-guide/routes/extend-a-route
-// - Smart action routes will need to be added as you create new Smart Actions - Learn how to create a Smart Action here: https://docs.forestadmin.com/documentation/v/v6/reference-guide/actions/create-and-manage-smart-actions
+const models = require('../models');
+const collectionName = 'orders';
+const permissionMiddlewareCreator = new PermissionMiddlewareCreator(`${collectionName}`);
 
-// Create a Order
-router.post('/orders', permissionMiddlewareCreator.create(), (request, response, next) => {
-  // Learn what this route does here: https://docs.forestadmin.com/documentation/v/v6/reference-guide/routes/default-routes#create-a-record
+// Create a Record
+router.post(`/${collectionName}`, permissionMiddlewareCreator.create(), (request, response, next) => {
+ next();
+});
+
+// Update a Record
+router.put(`/${collectionName}/:recordId`, permissionMiddlewareCreator.update(), (request, response, next) => {
   next();
 });
 
-// Update a Order
-router.put('/orders/:recordId', permissionMiddlewareCreator.update(), (request, response, next) => {
-  // Learn what this route does here: https://docs.forestadmin.com/documentation/v/v6/reference-guide/routes/default-routes#update-a-record
+// Delete a Record
+router.delete(`/${collectionName}/:recordId`, permissionMiddlewareCreator.delete(), (request, response, next) => {
   next();
 });
 
-// Delete a Order
-router.delete('/orders/:recordId', permissionMiddlewareCreator.delete(), (request, response, next) => {
-  // Learn what this route does here: https://docs.forestadmin.com/documentation/v/v6/reference-guide/routes/default-routes#delete-a-record
+// Get a list of Records
+router.get(`/${collectionName}`, permissionMiddlewareCreator.list(), async (request, response, next) => {
   next();
 });
 
-// Get a list of Orders
-router.get('/orders', permissionMiddlewareCreator.list(), (request, response, next) => {
-  // Learn what this route does here: https://docs.forestadmin.com/documentation/v/v6/reference-guide/routes/default-routes#get-a-list-of-records
+// Get a number of Records
+router.get(`/${collectionName}/count`, permissionMiddlewareCreator.list(), (request, response, next) => {
   next();
 });
 
-// Get a number of Orders
-router.get('/orders/count', permissionMiddlewareCreator.list(), (request, response, next) => {
-  // Learn what this route does here: https://docs.forestadmin.com/documentation/v/v6/reference-guide/routes/default-routes#get-a-number-of-records
+// Get a Record
+router.get(`/${collectionName}/:recordId`, permissionMiddlewareCreator.details(), (request, response, next) => {
   next();
 });
 
-// Get a Order
-router.get('/orders/:recordId', permissionMiddlewareCreator.details(), (request, response, next) => {
-  // Learn what this route does here: https://docs.forestadmin.com/documentation/v/v6/reference-guide/routes/default-routes#get-a-record
+// Export a list of Records
+router.get(`/${collectionName}.csv`, permissionMiddlewareCreator.export(), (request, response, next) => {
   next();
 });
 
-// Export a list of Orders
-router.get('/orders.csv', permissionMiddlewareCreator.export(), (request, response, next) => {
-  // Learn what this route does here: https://docs.forestadmin.com/documentation/v/v6/reference-guide/routes/default-routes#export-a-list-of-records
-  next();
-});
-
-// Delete a list of Orders
-router.delete('/orders', permissionMiddlewareCreator.delete(), (request, response, next) => {
-  // Learn what this route does here: https://docs.forestadmin.com/documentation/v/v6/reference-guide/routes/default-routes#delete-a-list-of-records
+// Delete a list of Records
+router.delete(`/${collectionName}`, permissionMiddlewareCreator.delete(), (request, response, next) => {
   next();
 });
 

@@ -38,6 +38,21 @@
       "inverseOf": null,
       "validations": []
     }, {
+      "field": "documents",
+      "type": ["Number"],
+      "defaultValue": null,
+      "enums": null,
+      "integration": null,
+      "isFilterable": true,
+      "isReadOnly": false,
+      "isRequired": false,
+      "isSortable": true,
+      "isVirtual": false,
+      "reference": "documents.customerId",
+      "inverseOf": null,
+      "relationship": "BelongsToMany",
+      "validations": []
+    }, {
       "field": "email",
       "type": "String",
       "defaultValue": null,
@@ -123,6 +138,20 @@
       "inverseOf": null,
       "validations": []
     }, {
+      "field": "locationGeo",
+      "type": "String",
+      "defaultValue": null,
+      "enums": null,
+      "integration": null,
+      "isFilterable": false,
+      "isReadOnly": true,
+      "isRequired": false,
+      "isSortable": false,
+      "isVirtual": true,
+      "reference": null,
+      "inverseOf": null,
+      "validations": []
+    }, {
       "field": "orders",
       "type": ["Number"],
       "defaultValue": null,
@@ -139,6 +168,20 @@
       "validations": []
     }, {
       "field": "phone",
+      "type": "String",
+      "defaultValue": null,
+      "enums": null,
+      "integration": null,
+      "isFilterable": true,
+      "isReadOnly": false,
+      "isRequired": false,
+      "isSortable": true,
+      "isVirtual": false,
+      "reference": null,
+      "inverseOf": null,
+      "validations": []
+    }, {
+      "field": "rejectReason",
       "type": "String",
       "defaultValue": null,
       "enums": null,
@@ -179,6 +222,223 @@
       "reference": null,
       "inverseOf": null,
       "validations": []
+    }, {
+      "field": "subscriptions",
+      "type": ["Number"],
+      "defaultValue": null,
+      "enums": null,
+      "integration": null,
+      "isFilterable": true,
+      "isReadOnly": false,
+      "isRequired": false,
+      "isSortable": true,
+      "isVirtual": false,
+      "reference": "customersSubscriptions.customerIdKey",
+      "inverseOf": null,
+      "relationship": "HasMany",
+      "validations": []
+    }, {
+      "field": "updatedAt",
+      "type": "Date",
+      "defaultValue": null,
+      "enums": null,
+      "integration": null,
+      "isFilterable": true,
+      "isReadOnly": false,
+      "isRequired": false,
+      "isSortable": true,
+      "isVirtual": false,
+      "reference": null,
+      "inverseOf": null,
+      "validations": []
+    }],
+    "segments": [],
+    "actions": [{
+      "name": "Approve",
+      "type": "single",
+      "baseUrl": null,
+      "endpoint": "/forest/actions/customers/approve",
+      "httpMethod": "POST",
+      "redirect": null,
+      "download": false,
+      "fields": []
+    }, {
+      "name": "Change Avatar",
+      "type": "single",
+      "baseUrl": null,
+      "endpoint": "/forest/actions/change-avatar",
+      "httpMethod": "POST",
+      "redirect": null,
+      "download": false,
+      "fields": []
+    }, {
+      "name": "KYC",
+      "type": "global",
+      "baseUrl": null,
+      "endpoint": "/forest/actions/front/kyc",
+      "httpMethod": "POST",
+      "redirect": null,
+      "download": false,
+      "fields": [{
+        "field": "Full Name",
+        "type": "String",
+        "defaultValue": null,
+        "enums": null,
+        "isRequired": true,
+        "reference": null,
+        "description": null,
+        "position": 0,
+        "widget": null
+      }, {
+        "field": "Email",
+        "type": "String",
+        "defaultValue": null,
+        "enums": null,
+        "isRequired": true,
+        "reference": null,
+        "description": null,
+        "position": 1,
+        "widget": null
+      }, {
+        "field": "Phone",
+        "type": "String",
+        "defaultValue": null,
+        "enums": null,
+        "isRequired": true,
+        "reference": null,
+        "description": null,
+        "position": 2,
+        "widget": null
+      }, {
+        "field": "ID Document",
+        "type": "File",
+        "defaultValue": null,
+        "enums": null,
+        "isRequired": true,
+        "reference": null,
+        "description": "Provide a valid document ID: Passport, ID Card, Driving Licence",
+        "position": 3,
+        "widget": null
+      }]
+    }, {
+      "name": "Reject",
+      "type": "single",
+      "baseUrl": null,
+      "endpoint": "/forest/actions/customers/reject",
+      "httpMethod": "POST",
+      "redirect": null,
+      "download": false,
+      "fields": [{
+        "field": "Rejection Reason",
+        "type": "String",
+        "defaultValue": null,
+        "enums": null,
+        "isRequired": false,
+        "reference": null,
+        "description": null,
+        "position": 0,
+        "widget": null
+      }]
+    }, {
+      "name": "Subscribe Basic Plan",
+      "type": "single",
+      "baseUrl": null,
+      "endpoint": "/forest/actions/front/subscribe-basic-plan",
+      "httpMethod": "POST",
+      "redirect": null,
+      "download": false,
+      "fields": []
+    }, {
+      "name": "Subscribe Comprehensive Plan",
+      "type": "single",
+      "baseUrl": null,
+      "endpoint": "/forest/actions/front/subscribe-comprehensive-plan",
+      "httpMethod": "POST",
+      "redirect": null,
+      "download": false,
+      "fields": []
+    }, {
+      "name": "Subscribe Premium Plan",
+      "type": "single",
+      "baseUrl": null,
+      "endpoint": "/forest/actions/front/subscribe-premium-plan",
+      "httpMethod": "POST",
+      "redirect": null,
+      "download": false,
+      "fields": []
+    }]
+  }, {
+    "name": "customersDocuments",
+    "nameOld": "customersDocuments",
+    "icon": null,
+    "integration": null,
+    "isReadOnly": false,
+    "isSearchable": true,
+    "isVirtual": false,
+    "onlyForRelationships": false,
+    "paginationType": "page",
+    "fields": [{
+      "field": "createdAt",
+      "type": "Date",
+      "defaultValue": null,
+      "enums": null,
+      "integration": null,
+      "isFilterable": true,
+      "isReadOnly": false,
+      "isRequired": false,
+      "isSortable": true,
+      "isVirtual": false,
+      "reference": null,
+      "inverseOf": null,
+      "validations": []
+    }, {
+      "field": "customer",
+      "type": "Number",
+      "defaultValue": null,
+      "enums": null,
+      "integration": null,
+      "isFilterable": true,
+      "isReadOnly": false,
+      "isRequired": false,
+      "isSortable": true,
+      "isVirtual": false,
+      "reference": "customers.customerIdKey",
+      "inverseOf": null,
+      "relationship": "BelongsTo",
+      "validations": []
+    }, {
+      "field": "document",
+      "type": "Number",
+      "defaultValue": null,
+      "enums": null,
+      "integration": null,
+      "isFilterable": true,
+      "isReadOnly": false,
+      "isRequired": false,
+      "isSortable": true,
+      "isVirtual": false,
+      "reference": "documents.documentIdKey",
+      "inverseOf": null,
+      "relationship": "BelongsTo",
+      "validations": []
+    }, {
+      "field": "type",
+      "type": "String",
+      "defaultValue": "KYC",
+      "enums": null,
+      "integration": null,
+      "isFilterable": true,
+      "isReadOnly": false,
+      "isRequired": true,
+      "isSortable": true,
+      "isVirtual": false,
+      "reference": null,
+      "inverseOf": null,
+      "validations": [{
+        "message": null,
+        "type": "is present",
+        "value": null
+      }]
     }, {
       "field": "updatedAt",
       "type": "Date",
@@ -293,6 +553,34 @@
       "relationship": "BelongsTo",
       "validations": []
     }, {
+      "field": "reference",
+      "type": "String",
+      "defaultValue": null,
+      "enums": null,
+      "integration": null,
+      "isFilterable": false,
+      "isReadOnly": true,
+      "isRequired": false,
+      "isSortable": false,
+      "isVirtual": true,
+      "reference": null,
+      "inverseOf": null,
+      "validations": []
+    }, {
+      "field": "rejectReason",
+      "type": "String",
+      "defaultValue": null,
+      "enums": null,
+      "integration": null,
+      "isFilterable": true,
+      "isReadOnly": false,
+      "isRequired": false,
+      "isSortable": true,
+      "isVirtual": false,
+      "reference": null,
+      "inverseOf": null,
+      "validations": []
+    }, {
       "field": "startDate",
       "type": "Date",
       "defaultValue": null,
@@ -336,7 +624,35 @@
       "validations": []
     }],
     "segments": [],
-    "actions": []
+    "actions": [{
+      "name": "Complete",
+      "type": "single",
+      "baseUrl": null,
+      "endpoint": "/forest/actions/subscriptions/complete",
+      "httpMethod": "POST",
+      "redirect": null,
+      "download": false,
+      "fields": []
+    }, {
+      "name": "Reject",
+      "type": "single",
+      "baseUrl": null,
+      "endpoint": "/forest/actions/subscriptions/reject",
+      "httpMethod": "POST",
+      "redirect": null,
+      "download": false,
+      "fields": [{
+        "field": "Rejection Reason",
+        "type": "String",
+        "defaultValue": null,
+        "enums": null,
+        "isRequired": false,
+        "reference": null,
+        "description": null,
+        "position": 0,
+        "widget": null
+      }]
+    }]
   }, {
     "name": "documents",
     "nameOld": "documents",
@@ -348,6 +664,20 @@
     "onlyForRelationships": false,
     "paginationType": "page",
     "fields": [{
+      "field": "createdAt",
+      "type": "Date",
+      "defaultValue": null,
+      "enums": null,
+      "integration": null,
+      "isFilterable": true,
+      "isReadOnly": false,
+      "isRequired": false,
+      "isSortable": true,
+      "isVirtual": false,
+      "reference": null,
+      "inverseOf": null,
+      "validations": []
+    }, {
       "field": "fileId",
       "type": "String",
       "defaultValue": null,
@@ -397,6 +727,34 @@
         "type": "is present",
         "value": null
       }]
+    }, {
+      "field": "updatedAt",
+      "type": "Date",
+      "defaultValue": null,
+      "enums": null,
+      "integration": null,
+      "isFilterable": true,
+      "isReadOnly": false,
+      "isRequired": false,
+      "isSortable": true,
+      "isVirtual": false,
+      "reference": null,
+      "inverseOf": null,
+      "validations": []
+    }, {
+      "field": "url",
+      "type": "String",
+      "defaultValue": null,
+      "enums": null,
+      "integration": null,
+      "isFilterable": false,
+      "isReadOnly": true,
+      "isRequired": false,
+      "isSortable": false,
+      "isVirtual": true,
+      "reference": null,
+      "inverseOf": null,
+      "validations": []
     }],
     "segments": [],
     "actions": []

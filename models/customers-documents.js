@@ -4,33 +4,36 @@ module.exports = (sequelize, DataTypes) => {
   const { Sequelize } = sequelize;
   // This section contains the fields of your model, mapped to your table's columns.
   // Learn more here: https://docs.forestadmin.com/documentation/v/v6/reference-guide/models/enrich-your-models#declaring-a-new-field-in-a-model
-  const Products = sequelize.define('products', {
-    price: {
-      type: DataTypes.DOUBLE,
-    },
-    label: {
+  const CustomersDocuments = sequelize.define('customersDocuments', {
+    type: {
       type: DataTypes.STRING,
-    },
-    picture: {
-      type: DataTypes.STRING,
+      defaultValue: 'KYC',
+      allowNull: false,
     },
   }, {
-    tableName: 'products',
+    tableName: 'customers_documents',
     underscored: true,
     timestamps: true,
     schema: process.env.DATABASE_SCHEMA,
   });
 
   // This section contains the relationships for this model. See: https://docs.forestadmin.com/documentation/v/v6/reference-guide/relationships#adding-relationships.
-  Products.associate = (models) => {
-    Products.hasMany(models.orders, {
+  CustomersDocuments.associate = (models) => {
+    CustomersDocuments.belongsTo(models.customers, {
       foreignKey: {
-        name: 'productIdKey',
-        field: 'product_id',
+        name: 'customerIdKey',
+        field: 'customer_id',
       },
-      as: 'orders',
+      as: 'customer',
+    });
+    CustomersDocuments.belongsTo(models.documents, {
+      foreignKey: {
+        name: 'documentIdKey',
+        field: 'document_id',
+      },
+      as: 'document',
     });
   };
 
-  return Products;
+  return CustomersDocuments;
 };

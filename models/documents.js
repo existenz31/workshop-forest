@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     tableName: 'documents',
     underscored: true,
-    timestamps: false,
+    timestamps: true,
     schema: process.env.DATABASE_SCHEMA,
   });
 

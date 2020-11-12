@@ -8,11 +8,8 @@ module.exports = (sequelize, DataTypes) => {
     status: {
       type: DataTypes.STRING,
     },
-    createdAt: {
-      type: DataTypes.DATE,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
+    rejectReason: {
+      type: DataTypes.STRING,
     },
     startDate: {
       type: DataTypes.DATE,
@@ -26,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     tableName: 'customers_subscriptions',
     underscored: true,
+    timestamps: true,
     schema: process.env.DATABASE_SCHEMA,
   });
 

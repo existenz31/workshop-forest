@@ -13,12 +13,6 @@ module.exports = (sequelize, DataTypes) => {
     status: {
       type: DataTypes.STRING,
     },
-    createdAt: {
-      type: DataTypes.DATE,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-    },
     beingProcessedAt: {
       type: DataTypes.DATE,
     },
@@ -28,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     tableName: 'orders',
     underscored: true,
+    timestamps: true,
     schema: process.env.DATABASE_SCHEMA,
   });
 
