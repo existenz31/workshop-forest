@@ -6,6 +6,8 @@ const models = require('../models');
 const collectionName = 'customers';
 const permissionMiddlewareCreator = new PermissionMiddlewareCreator(`${collectionName}`);
 
+const EmailService = require("../services/email-service");
+
 // Create a Record
 router.post(`/${collectionName}`, permissionMiddlewareCreator.create(), (request, response, next) => {
  next();
@@ -51,10 +53,26 @@ router.delete(`/${collectionName}`, permissionMiddlewareCreator.delete(), (reque
  */
 router.post('/actions/customers/approve', permissionMiddlewareCreator.smartAction(), async (request, response, next) => {
   const customerId = request.body.data.attributes.ids[0];
-  models.customers.update({ status: 'approved' }, {
-    where: {
-      id: customerId
-    }
+
+  models.customers.findByPk(customerId)
+  .then( (customer) => {
+    return customer.update({ 
+      status: 'approved' 
+    });
+  })
+  .then( (customer) => {
+    /* Send Welcome email to the approved customer */
+    let emailService = new EmailService();
+    let firstname = customer.firstname?customer.firstname:'';
+    let lastname = customer.lastname?customer.lastname:'';
+    
+    return emailService.sendEmail(
+      customer.email,
+      process.env.SENDGRID_TEMPLATE_WELCOME,
+      {
+        fullName: `${firstname} ${lastname}`,
+      }
+    );
   })
   .then( () => {
     response.send({ 
@@ -62,19 +80,20 @@ router.post('/actions/customers/approve', permissionMiddlewareCreator.smartActio
      });  
   })
   .catch(next);
+
 });
 
 router.post('/actions/customers/reject', permissionMiddlewareCreator.smartAction(), async (request, response, next) => {
   const customerId = request.body.data.attributes.ids[0];
-  models.customers.update({ 
-    status: 'rejected',
-    rejectReason:  request.body.data.attributes.values['Rejection Reason'],
-  }, {
-    where: {
-      id: customerId
-    }
+  models.customers.findByPk(customerId)
+  .then( (customer) => {
+    return customer.update({ 
+      status: 'rejected',
+      rejectReason:  request.body.data.attributes.values['Rejection Reason'],
+      });
   })
-  .then( () => {
+  // eslint-disable-next-line no-unused-vars
+  .then( (customer) => {
     response.send({ 
       success: 'Customer Rejected!',
      });  

@@ -1,10 +1,20 @@
 const { collection } = require('forest-express-sequelize');
+const moment = require('moment');
 
-// This file allows you to add to your Forest UI:
-// - Smart actions: https://docs.forestadmin.com/documentation/reference-guide/actions/create-and-manage-smart-actions
-// - Smart fields: https://docs.forestadmin.com/documentation/reference-guide/fields/create-and-manage-smart-fields
-// - Smart relationships: https://docs.forestadmin.com/documentation/reference-guide/relationships/create-a-smart-relationship
-// - Smart segments: https://docs.forestadmin.com/documentation/reference-guide/segments/smart-segments
+const subscriptionFormFields = [
+  {
+    field: 'Start Date',
+    type: 'Dateonly',
+    required: true,
+  },
+  {
+    field: 'Bank Account Details',
+    description: 'IBAN or SEPA',
+    type: 'String',
+    required: true,
+  },
+];
+
 collection('customers', {
   actions: [
   {
@@ -31,16 +41,22 @@ collection('customers', {
     name: 'Subscribe Basic Plan',
     type: 'single',
     endpoint: '/forest/actions/front/subscribe-basic-plan',
+    fields: subscriptionFormFields,
+    values: () => { return {'Start Date': moment().format('YYYY-MM-DD')} },
   },
   {
     name: 'Subscribe Comprehensive Plan',
     type: 'single',
     endpoint: '/forest/actions/front/subscribe-comprehensive-plan',
+    fields: subscriptionFormFields,
+    values: () => { return {'Start Date': moment().format('YYYY-MM-DD')} },
   },
   {
     name: 'Subscribe Premium Plan',
     type: 'single',
     endpoint: '/forest/actions/front/subscribe-premium-plan',
+    fields: subscriptionFormFields,
+    values: () => { return {'Start Date': moment().format('YYYY-MM-DD')} },
   },
   {
     name: 'KYC',
@@ -59,6 +75,7 @@ collection('customers', {
     },
     {
       field: 'Phone',
+      description: 'International Format: e.g. +33612345678',
       type: 'String',
       isRequired: true
     },
@@ -74,15 +91,12 @@ collection('customers', {
   fields: [{
     field: 'fullName',
     get: (customer) => {
-      return `${customer.firstname} ${customer.lastname}`;
-    }
-  }, 
-  {
-    field: 'locationGeo',
-    get: (customer) => {
-      return [12, 41];
-    }
+      const firstname = customer.firstname;
+      const lastname = customer.lastname;      
+      const customerFullName = (firstname?firstname + ' ': '') + (lastname?lastname: '');
 
+      return `${customerFullName}`;
+    }
   }],
   segments: [],
 });

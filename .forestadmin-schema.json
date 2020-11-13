@@ -138,20 +138,6 @@
       "inverseOf": null,
       "validations": []
     }, {
-      "field": "locationGeo",
-      "type": "String",
-      "defaultValue": null,
-      "enums": null,
-      "integration": null,
-      "isFilterable": false,
-      "isReadOnly": true,
-      "isRequired": false,
-      "isSortable": false,
-      "isVirtual": true,
-      "reference": null,
-      "inverseOf": null,
-      "validations": []
-    }, {
       "field": "orders",
       "type": ["Number"],
       "defaultValue": null,
@@ -306,7 +292,7 @@
         "enums": null,
         "isRequired": true,
         "reference": null,
-        "description": null,
+        "description": "International Format: e.g. +33612345678",
         "position": 2,
         "widget": null
       }, {
@@ -347,7 +333,27 @@
       "httpMethod": "POST",
       "redirect": null,
       "download": false,
-      "fields": []
+      "fields": [{
+        "field": "Start Date",
+        "type": "Dateonly",
+        "defaultValue": null,
+        "enums": null,
+        "isRequired": false,
+        "reference": null,
+        "description": null,
+        "position": 0,
+        "widget": null
+      }, {
+        "field": "Bank Account Details",
+        "type": "String",
+        "defaultValue": null,
+        "enums": null,
+        "isRequired": false,
+        "reference": null,
+        "description": "IBAN or SEPA",
+        "position": 1,
+        "widget": null
+      }]
     }, {
       "name": "Subscribe Comprehensive Plan",
       "type": "single",
@@ -356,7 +362,27 @@
       "httpMethod": "POST",
       "redirect": null,
       "download": false,
-      "fields": []
+      "fields": [{
+        "field": "Start Date",
+        "type": "Dateonly",
+        "defaultValue": null,
+        "enums": null,
+        "isRequired": false,
+        "reference": null,
+        "description": null,
+        "position": 0,
+        "widget": null
+      }, {
+        "field": "Bank Account Details",
+        "type": "String",
+        "defaultValue": null,
+        "enums": null,
+        "isRequired": false,
+        "reference": null,
+        "description": "IBAN or SEPA",
+        "position": 1,
+        "widget": null
+      }]
     }, {
       "name": "Subscribe Premium Plan",
       "type": "single",
@@ -365,7 +391,27 @@
       "httpMethod": "POST",
       "redirect": null,
       "download": false,
-      "fields": []
+      "fields": [{
+        "field": "Start Date",
+        "type": "Dateonly",
+        "defaultValue": null,
+        "enums": null,
+        "isRequired": false,
+        "reference": null,
+        "description": null,
+        "position": 0,
+        "widget": null
+      }, {
+        "field": "Bank Account Details",
+        "type": "String",
+        "defaultValue": null,
+        "enums": null,
+        "isRequired": false,
+        "reference": null,
+        "description": "IBAN or SEPA",
+        "position": 1,
+        "widget": null
+      }]
     }]
   }, {
     "name": "customersDocuments",
@@ -407,6 +453,20 @@
       "relationship": "BelongsTo",
       "validations": []
     }, {
+      "field": "customerId",
+      "type": "Number",
+      "defaultValue": null,
+      "enums": null,
+      "integration": null,
+      "isFilterable": true,
+      "isReadOnly": false,
+      "isRequired": false,
+      "isSortable": true,
+      "isVirtual": false,
+      "reference": null,
+      "inverseOf": null,
+      "validations": []
+    }, {
       "field": "document",
       "type": "Number",
       "defaultValue": null,
@@ -422,23 +482,19 @@
       "relationship": "BelongsTo",
       "validations": []
     }, {
-      "field": "type",
-      "type": "String",
-      "defaultValue": "KYC",
+      "field": "documentId",
+      "type": "Number",
+      "defaultValue": null,
       "enums": null,
       "integration": null,
       "isFilterable": true,
       "isReadOnly": false,
-      "isRequired": true,
+      "isRequired": false,
       "isSortable": true,
       "isVirtual": false,
       "reference": null,
       "inverseOf": null,
-      "validations": [{
-        "message": null,
-        "type": "is present",
-        "value": null
-      }]
+      "validations": []
     }, {
       "field": "updatedAt",
       "type": "Date",
@@ -498,6 +554,20 @@
     }, {
       "field": "endDate",
       "type": "Date",
+      "defaultValue": null,
+      "enums": null,
+      "integration": null,
+      "isFilterable": true,
+      "isReadOnly": false,
+      "isRequired": false,
+      "isSortable": true,
+      "isVirtual": false,
+      "reference": null,
+      "inverseOf": null,
+      "validations": []
+    }, {
+      "field": "iban",
+      "type": "String",
       "defaultValue": null,
       "enums": null,
       "integration": null,
@@ -678,23 +748,19 @@
       "inverseOf": null,
       "validations": []
     }, {
-      "field": "fileId",
+      "field": "file",
       "type": "String",
       "defaultValue": null,
       "enums": null,
       "integration": null,
-      "isFilterable": true,
-      "isReadOnly": false,
-      "isRequired": true,
-      "isSortable": true,
-      "isVirtual": false,
+      "isFilterable": false,
+      "isReadOnly": true,
+      "isRequired": false,
+      "isSortable": false,
+      "isVirtual": true,
       "reference": null,
       "inverseOf": null,
-      "validations": [{
-        "message": null,
-        "type": "is present",
-        "value": null
-      }]
+      "validations": []
     }, {
       "field": "id",
       "type": "Number",
@@ -728,6 +794,42 @@
         "value": null
       }]
     }, {
+      "field": "s3Id",
+      "type": "String",
+      "defaultValue": null,
+      "enums": null,
+      "integration": null,
+      "isFilterable": true,
+      "isReadOnly": false,
+      "isRequired": true,
+      "isSortable": true,
+      "isVirtual": false,
+      "reference": null,
+      "inverseOf": null,
+      "validations": [{
+        "message": null,
+        "type": "is present",
+        "value": null
+      }]
+    }, {
+      "field": "type",
+      "type": "String",
+      "defaultValue": "KYC",
+      "enums": null,
+      "integration": null,
+      "isFilterable": true,
+      "isReadOnly": false,
+      "isRequired": true,
+      "isSortable": true,
+      "isVirtual": false,
+      "reference": null,
+      "inverseOf": null,
+      "validations": [{
+        "message": null,
+        "type": "is present",
+        "value": null
+      }]
+    }, {
       "field": "updatedAt",
       "type": "Date",
       "defaultValue": null,
@@ -738,20 +840,6 @@
       "isRequired": false,
       "isSortable": true,
       "isVirtual": false,
-      "reference": null,
-      "inverseOf": null,
-      "validations": []
-    }, {
-      "field": "url",
-      "type": "String",
-      "defaultValue": null,
-      "enums": null,
-      "integration": null,
-      "isFilterable": false,
-      "isReadOnly": true,
-      "isRequired": false,
-      "isSortable": false,
-      "isVirtual": true,
       "reference": null,
       "inverseOf": null,
       "validations": []
@@ -1421,7 +1509,7 @@
   "meta": {
     "database_type": "postgres",
     "liana": "forest-express-sequelize",
-    "liana_version": "6.3.14",
+    "liana_version": "6.3.11",
     "engine": "nodejs",
     "engine_version": "12.18.3",
     "framework": "other",

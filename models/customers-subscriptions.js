@@ -20,6 +20,9 @@ module.exports = (sequelize, DataTypes) => {
     monthlyFees: {
       type: DataTypes.DECIMAL,
     },
+    iban: {
+      type: DataTypes.STRING,
+    },
   }, {
     tableName: 'customers_subscriptions',
     underscored: true,

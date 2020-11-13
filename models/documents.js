@@ -5,8 +5,13 @@ module.exports = (sequelize, DataTypes) => {
   // This section contains the fields of your model, mapped to your table's columns.
   // Learn more here: https://docs.forestadmin.com/documentation/v/v6/reference-guide/models/enrich-your-models#declaring-a-new-field-in-a-model
   const Documents = sequelize.define('documents', {
-    fileId: {
+    s3Id: {
       type: DataTypes.STRING,
+      allowNull: false,
+    },
+    type: {
+      type: DataTypes.STRING,
+      defaultValue: 'KYC',
       allowNull: false,
     },
     isVerified: {

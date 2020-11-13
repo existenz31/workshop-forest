@@ -6,6 +6,8 @@ const models = require('../models');
 const collectionName = 'customersSubscriptions';
 const permissionMiddlewareCreator = new PermissionMiddlewareCreator(`${collectionName}`);
 
+const fetch = require('node-fetch');
+
 // Create a Record
 router.post(`/${collectionName}`, permissionMiddlewareCreator.create(), (request, response, next) => {
   const recordCreator = new RecordCreator(models[collectionName]);
@@ -62,14 +64,36 @@ router.delete(`/${collectionName}`, permissionMiddlewareCreator.delete(), (reque
 
 router.post('/actions/subscriptions/complete', permissionMiddlewareCreator.smartAction(), async (request, response, next) => {
   const subscriptionId = request.body.data.attributes.ids[0];
-  models.customersSubscriptions.update({ status: 'completed' }, {
-    where: {
-      id: subscriptionId
-    }
+  models.customersSubscriptions
+  .findByPk(subscriptionId)
+  .then ( (customerSubscription) => {
+    return customerSubscription.update({ status: 'completed' })
   })
-  .then( () => {
+  .then( async (customerSubscriptionUpdated) => {
+    const customer = await models.customers.findByPk(customerSubscriptionUpdated.customerIdKey); 
+    // Trigger the Zapier Webhook   
+    const message = process.env.ZAPIER_SUBSCRIPTION_COMPLETE_MSG;
+
+    await fetch(process.env.ZAPIER_WORKSHOP_FOREST_WEBHOOK, {
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
+      body: JSON.stringify({
+        phoneNumber: customer.phone,
+        message: message.format(customer.firstname),
+      }),
+    });
+
     response.send({ 
       success: 'Subscription Completed!',
+      // webhook: {
+      //   url: process.env.ZAPIER_WORKSHOP_FOREST_WEBHOOK, // The url of the Zapier Webhook
+      //   method: 'POST', // The method you would like to use (typically a POST).
+      //   headers: { 'Content-Type': 'application/json' }, 
+      //   body: JSON.stringify({ // A body to send to the url (only JSON supported).
+      //     phoneNumber: customer.phone,
+      //     message: message.format(customer.firstname),
+      //   }),
+      // },
      });  
   })
   .catch(next);
@@ -92,5 +116,13 @@ router.post('/actions/subscriptions/reject', permissionMiddlewareCreator.smartAc
   })
   .catch(next);
 });
+
+String.prototype.format = function() {
+  let a = this;
+  for (let k in arguments) {
+    a = a.replace("{" + k + "}", arguments[k])
+  }
+  return a
+}
 
 module.exports = router;

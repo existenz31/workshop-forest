@@ -24,7 +24,12 @@ collection('customersSubscriptions', {
     {
       field: 'reference',
       get: (customersSouscriptions) => {
-        return `[${customersSouscriptions.product.label}] ${customersSouscriptions.customer.firstname} ${customersSouscriptions.customer.lastname}`;
+        const productLabel = customersSouscriptions.product.label;
+        const firstname = customersSouscriptions.customer.firstname;
+        const lastname = customersSouscriptions.customer.lastname;
+        
+        const customerFullName = (firstname?firstname + ' ': '') + (lastname?lastname: '');
+        return `[${productLabel}] ${customerFullName}`;
       }
     }
   ],

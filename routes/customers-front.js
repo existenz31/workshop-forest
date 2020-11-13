@@ -9,20 +9,25 @@ const collectionName = 'customers';
 const router = express.Router();
 const permissionMiddlewareCreator = new PermissionMiddlewareCreator(`${collectionName}`);
 
-async function createSubscription(customerId, subscriptionLabel) {
+async function createSubscription(opts, subscriptionLabel) {
   const plan = await models.subscriptionProducts.findOne({where: {label: subscriptionLabel}});
   return models.customersSubscriptions.create({
     status: 'submitted',
-    startDate: moment(),
+    startDate: opts.startDate,
+    iban: opts.iban,
     productIdKey: plan.id,
-    customerIdKey: customerId,
+    customerIdKey: opts.customerId,
     monthlyFees: plan.price,
   });
 }
 
 router.post('/actions/front/subscribe-basic-plan', permissionMiddlewareCreator.smartAction(), async (request, response, next) => {
-  const customerId = request.body.data.attributes.ids[0];
-  createSubscription(customerId, 'Basic plan')
+  const opts = {
+    customerId: request.body.data.attributes.ids[0],
+    startDate: request.body.data.attributes.values['Start Date'],
+    iban: request.body.data.attributes.values['Bank Account Details'],
+  };
+  createSubscription(opts, 'Basic plan')
   .then( () => {
     response.send({ 
       success: 'Basic Subscription submitted!',
@@ -78,12 +83,12 @@ router.post('/actions/front/kyc', permissionMiddlewareCreator.smartAction(), asy
     const key = await s3Service.uploadFile(documentPrefix, 'kyc-id-document', file);
 
     const doc = await models.documents.create({
-      fileId: key,
+      s3Id: key,
       isVerified: false,
+      type: 'id_document',
     });
 
     const customerDocument = await models.customersDocuments.create({
-      type: 'KYC',
       documentId: doc.id,
       customerId: customerCreated.id,
     });

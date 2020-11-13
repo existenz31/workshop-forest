@@ -6,10 +6,10 @@ collection('documents', {
   actions: [],
   fields: [
     {
-      field: 'url',
+      field: 'file',
       type: 'String',
       get: (document) => {
-        return s3Service.getDocumentById(document.fileId);
+        return s3Service.getDocumentById(document.s3Id);
       }
     }
   ],
