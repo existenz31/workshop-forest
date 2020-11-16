@@ -1,7 +1,6 @@
 const express = require('express');
 const { PermissionMiddlewareCreator } = require('forest-express-sequelize');
 const models = require('../models');
-const moment = require('moment');
 const AwsS3Service = require('../services/aws-s3-service');
 const s3Service = new AwsS3Service();
 
@@ -19,7 +18,7 @@ async function createSubscription(opts, subscriptionLabel) {
   const doc = await models.documents.create({
     s3Id: key,
     isVerified: false,
-    type: 'source_of_sources',
+    type: 'source_of_funds',
   });
 
   // eslint-disable-next-line no-unused-vars
@@ -49,7 +48,7 @@ router.post('/actions/front/subscribe-basic-plan', permissionMiddlewareCreator.s
   .then( () => {
     response.send({ 
       success: 'Basic Subscription submitted!',
-      refresh: { relationships: ['subscriptions'] },
+      refresh: { relationships: ['subscriptions', 'documents'] },
      });  
   })
   .catch(next);
@@ -66,7 +65,7 @@ router.post('/actions/front/subscribe-comprehensive-plan', permissionMiddlewareC
   .then( () => {
     response.send({ 
       success: 'Comprehensive Subscription submitted!',
-      refresh: { relationships: ['subscriptions'] },
+      refresh: { relationships: ['subscriptions', 'documents'] },
      });  
   })
   .catch(next);
@@ -83,7 +82,7 @@ router.post('/actions/front/subscribe-premium-plan', permissionMiddlewareCreator
   .then( () => {
     response.send({ 
       success: 'Premium Subscription submitted!',
-      refresh: { relationships: ['subscriptions'] },
+      refresh: { relationships: ['subscriptions', 'documents'] },
      });  
   })
   .catch(next);

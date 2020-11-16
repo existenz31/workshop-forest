@@ -1,5 +1,6 @@
 const express = require('express');
-const { PermissionMiddlewareCreator } = require('forest-express-sequelize');
+const { PermissionMiddlewareCreator, RecordsGetter } = require('forest-express-sequelize');
+const {Op} = require('sequelize');
 const router = express.Router();
 
 const models = require('../models');
@@ -100,5 +101,32 @@ router.post('/actions/customers/reject', permissionMiddlewareCreator.smartAction
   })
   .catch(next);
 });
+
+router.get(`/${collectionName}/:recordId/relationships/documents`, (request, response, next) => {
+  /** Scope the documents for Team Operation */
+  if (request.user.team === 'Operations') {
+    const recordId = request.params.recordId;
+    let filterScope = {type: {[Op.ne]: 'source_of_funds'}}; /** Do not show the source of funds docs */
+    models.customersDocuments.findAll({
+      include: [{
+        model: models.documents,
+        as: 'document',
+        where: filterScope,
+      }],
+      where: {customerId: recordId}
+    })
+    .then(records => {
+      const recordsGetter = new RecordsGetter(models.documents);
+      const documents = records.map(record => record.document);
+      return recordsGetter.serialize(documents)
+    })
+    .then(recordsSerialized => response.send(recordsSerialized))
+    .catch(next);        
+  }
+  else {
+    next();
+  }
+});
+
 
 module.exports = router;
