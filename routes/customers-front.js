@@ -11,6 +11,23 @@ const permissionMiddlewareCreator = new PermissionMiddlewareCreator(`${collectio
 
 async function createSubscription(opts, subscriptionLabel) {
   const plan = await models.subscriptionProducts.findOne({where: {label: subscriptionLabel}});
+
+
+  const documentPrefix = `customers/${opts.customerId}`;
+  const key = await s3Service.uploadFile(documentPrefix, 'subscription-sof', opts.sourceFundsFile);
+
+  const doc = await models.documents.create({
+    s3Id: key,
+    isVerified: false,
+    type: 'source_of_sources',
+  });
+
+  // eslint-disable-next-line no-unused-vars
+  const customerDocument = await models.customersDocuments.create({
+    documentId: doc.id,
+    customerId: opts.customerId,
+  });
+
   return models.customersSubscriptions.create({
     status: 'submitted',
     startDate: opts.startDate,
@@ -26,6 +43,7 @@ router.post('/actions/front/subscribe-basic-plan', permissionMiddlewareCreator.s
     customerId: request.body.data.attributes.ids[0],
     startDate: request.body.data.attributes.values['Start Date'],
     iban: request.body.data.attributes.values['Bank Account Details'],
+    sourceFundsFile: request.body.data.attributes.values['Source of Funds'],
   };
   createSubscription(opts, 'Basic plan')
   .then( () => {
@@ -38,8 +56,13 @@ router.post('/actions/front/subscribe-basic-plan', permissionMiddlewareCreator.s
 });
 
 router.post('/actions/front/subscribe-comprehensive-plan', permissionMiddlewareCreator.smartAction(), async (request, response, next) => {
-  const customerId = request.body.data.attributes.ids[0];
-  createSubscription(customerId, 'Comprehensive plan')
+  const opts = {
+    customerId: request.body.data.attributes.ids[0],
+    startDate: request.body.data.attributes.values['Start Date'],
+    iban: request.body.data.attributes.values['Bank Account Details'],
+    sourceFundsFile: request.body.data.attributes.values['Source of Funds'],
+  };
+  createSubscription(opts, 'Comprehensive plan')
   .then( () => {
     response.send({ 
       success: 'Comprehensive Subscription submitted!',
@@ -50,8 +73,13 @@ router.post('/actions/front/subscribe-comprehensive-plan', permissionMiddlewareC
 });
 
 router.post('/actions/front/subscribe-premium-plan', permissionMiddlewareCreator.smartAction(), async (request, response, next) => {
-  const customerId = request.body.data.attributes.ids[0];
-  createSubscription(customerId, 'Premium plan')
+  const opts = {
+    customerId: request.body.data.attributes.ids[0],
+    startDate: request.body.data.attributes.values['Start Date'],
+    iban: request.body.data.attributes.values['Bank Account Details'],
+    sourceFundsFile: request.body.data.attributes.values['Source of Funds'],
+  };
+  createSubscription(opts, 'Premium plan')
   .then( () => {
     response.send({ 
       success: 'Premium Subscription submitted!',
@@ -88,6 +116,7 @@ router.post('/actions/front/kyc', permissionMiddlewareCreator.smartAction(), asy
       type: 'id_document',
     });
 
+    // eslint-disable-next-line no-unused-vars
     const customerDocument = await models.customersDocuments.create({
       documentId: doc.id,
       customerId: customerCreated.id,

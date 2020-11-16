@@ -13,6 +13,12 @@ const subscriptionFormFields = [
     type: 'String',
     required: true,
   },
+  {
+    field: 'Source of Funds',
+    description: 'Income Tax Declaration, Saving account statment, etc.',
+    type: 'File',
+    required: true,
+  },
 ];
 
 collection('customers', {
