@@ -72,14 +72,13 @@ router.post('/actions/subscriptions/complete', permissionMiddlewareCreator.smart
   .then( async (customerSubscriptionUpdated) => {
     const customer = await models.customers.findByPk(customerSubscriptionUpdated.customerIdKey); 
     // Trigger the Zapier Webhook   
-    const message = process.env.ZAPIER_SUBSCRIPTION_COMPLETE_MSG;
 
     await fetch(process.env.ZAPIER_WORKSHOP_FOREST_WEBHOOK, {
       headers: { 'Content-Type': 'application/json' },
       method: 'POST',
       body: JSON.stringify({
-        phoneNumber: customer.phone,
-        message: message.format(customer.firstname),
+        // Pass all customer details to let the business as free as possible when configuring the transactionals emails / SMS
+        customer, 
       }),
     });
 
