@@ -65,7 +65,11 @@ router.delete(`/${collectionName}`, permissionMiddlewareCreator.delete(), (reque
 router.post('/actions/subscriptions/complete', permissionMiddlewareCreator.smartAction(), async (request, response, next) => {
   const subscriptionId = request.body.data.attributes.ids[0];
   models.customersSubscriptions
-  .findByPk(subscriptionId)
+  // .findByPk(subscriptionId)
+  .findOne({ 
+    where: { id: subscriptionId },
+    include: { model: models.subscriptionProducts, as: 'product' },
+  })
   .then ( (customerSubscription) => {
     return customerSubscription.update({ status: 'completed' })
   })
@@ -77,22 +81,14 @@ router.post('/actions/subscriptions/complete', permissionMiddlewareCreator.smart
       headers: { 'Content-Type': 'application/json' },
       method: 'POST',
       body: JSON.stringify({
-        // Pass all customer details to let the business as free as possible when configuring the transactionals emails / SMS
+        // Pass all customer / subscription details to let the business as free as possible
         customer, 
+        subscription: customerSubscriptionUpdated,
       }),
     });
 
     response.send({ 
       success: 'Subscription Completed!',
-      // webhook: {
-      //   url: process.env.ZAPIER_WORKSHOP_FOREST_WEBHOOK, // The url of the Zapier Webhook
-      //   method: 'POST', // The method you would like to use (typically a POST).
-      //   headers: { 'Content-Type': 'application/json' }, 
-      //   body: JSON.stringify({ // A body to send to the url (only JSON supported).
-      //     phoneNumber: customer.phone,
-      //     message: message.format(customer.firstname),
-      //   }),
-      // },
      });  
   })
   .catch(next);
