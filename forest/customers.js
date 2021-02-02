@@ -48,21 +48,39 @@ collection('customers', {
     type: 'single',
     endpoint: '/forest/actions/front/subscribe-basic-plan',
     fields: subscriptionFormFields,
-    values: () => { return {'Start Date': moment().format('YYYY-MM-DD')} },
+    hooks: {
+      load: ({ fields, record }) => {
+        return {'Start Date': moment().format('YYYY-MM-DD')};
+      },
+      change: {
+        },
+      },
   },
   {
     name: 'Subscribe Comprehensive Plan',
     type: 'single',
     endpoint: '/forest/actions/front/subscribe-comprehensive-plan',
     fields: subscriptionFormFields,
-    values: () => { return {'Start Date': moment().format('YYYY-MM-DD')} },
+    hooks: {
+      load: ({ fields, record }) => {
+        return {'Start Date': moment().format('YYYY-MM-DD')};
+      },
+      change: {
+        },
+      },
   },
   {
     name: 'Subscribe Premium Plan',
     type: 'single',
     endpoint: '/forest/actions/front/subscribe-premium-plan',
     fields: subscriptionFormFields,
-    values: () => { return {'Start Date': moment().format('YYYY-MM-DD')} },
+    hooks: {
+      load: ({ fields, record }) => {
+        return {'Start Date': moment().format('YYYY-MM-DD')};
+      },
+      change: {
+        },
+      },
   },
   {
     name: 'KYC',
