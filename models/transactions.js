@@ -29,13 +29,18 @@ module.exports = (sequelize, DataTypes) => {
     reference: {
       type: DataTypes.STRING,
     },
+    createdAt: {
+      type: DataTypes.DATE,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+    },
     status: {
       type: DataTypes.STRING,
     },
   }, {
     tableName: 'transactions',
     underscored: true,
-    timestamps: true,
     schema: process.env.DATABASE_SCHEMA,
   });
 

@@ -14,7 +14,7 @@ router.post(`/${collectionName}`, permissionMiddlewareCreator.create(), (request
   recordCreator.deserialize(request.body)
     .then(async (recordToCreate) => {
       recordToCreate.status = 'submitted';
-      const plan = await models.subscriptionProducts.findByPk(recordToCreate.product);
+      const plan = await models.products.findByPk(recordToCreate.product);
       recordToCreate.monthlyFees = plan.price;
       return recordCreator.create(recordToCreate)
     })
@@ -68,7 +68,7 @@ router.post('/actions/subscriptions/complete', permissionMiddlewareCreator.smart
   // .findByPk(subscriptionId)
   .findOne({ 
     where: { id: subscriptionId },
-    include: { model: models.subscriptionProducts, as: 'product' },
+    include: { model: models.products, as: 'product' },
   })
   .then ( (customerSubscription) => {
     return customerSubscription.update({ status: 'completed' })

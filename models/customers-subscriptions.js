@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
       as: 'customer',
     });
 
-    CustomersSubscriptions.belongsTo(models.subscriptionProducts, {
+    CustomersSubscriptions.belongsTo(models.products, {
       foreignKey: {
         name: 'productIdKey',
         field: 'product_id',

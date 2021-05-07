@@ -9,7 +9,7 @@ const router = express.Router();
 const permissionMiddlewareCreator = new PermissionMiddlewareCreator(`${collectionName}`);
 
 async function createSubscription(opts, subscriptionLabel) {
-  const plan = await models.subscriptionProducts.findOne({where: {label: subscriptionLabel}});
+  const plan = await models.products.findOne({where: {label: subscriptionLabel}});
 
 
   const documentPrefix = `customers/${opts.customerId}`;

@@ -1,0 +1,28 @@
+<div class="c-smart-chart no-description" {{did-insert this.triggerEvent}}>
+  <div class="c-smart-chart__content">
+    <span class="form-inline" >
+        <label for="filtering-period">Period:</label>
+        <BetaSelect id="filtering-period" class="filter-select"
+          @options={{this.periodOptions}}
+          @valuePath="value"
+          @namePath="name"
+          @value={{this.filteringPeriod}}
+        />
+    </span>  
+    <span class="form-inline" >
+        <label for="filtering-other">Data Origin:</label>
+        <BetaSelect id="filtering-other" class="filter-select"
+          @options={{this.originOptions}}
+          @valuePath="value"
+          @namePath="name"
+          @value={{this.filteringOrigin}}
+        />
+    <Button::BetaButton
+      @type="primary"
+      @text="Refresh"
+      @async={{false}}
+      @action={{action 'triggerEvent'}}
+    />
+    </span>  
+  </div>
+</div>
