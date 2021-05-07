@@ -26,7 +26,17 @@ router.delete(`/${collectionName}/:recordId`, permissionMiddlewareCreator.delete
 
 // Get a list of Records
 router.get(`/${collectionName}`, permissionMiddlewareCreator.list(), async (request, response, next) => {
-  next();
+  // next();
+  const recordsGetter = new RecordsGetter(models.customers);
+  recordsGetter.getAll(request.query)
+    .then(records => {
+      records.unshift({id: 0, name:'dummy'})
+      return recordsGetter.serialize(records)
+    })
+    .then(recordsSerialized => {
+      return response.send(recordsSerialized)
+    })
+    .catch(next);    
 });
 
 // Get a number of Records
@@ -102,6 +112,12 @@ router.post('/actions/customers/reject', permissionMiddlewareCreator.smartAction
   .catch(next);
 });
 
+router.post('/actions/customers/reject/values', permissionMiddlewareCreator.smartAction(), async (request, response, next) => {
+  //TODO
+  next();
+});
+
+
 router.get(`/${collectionName}/:recordId/relationships/documents`, (request, response, next) => {
   /** Scope the documents for Team Operation */
   if (request.user.team === 'Operations') {
@@ -127,6 +143,5 @@ router.get(`/${collectionName}/:recordId/relationships/documents`, (request, res
     next();
   }
 });
-
 
 module.exports = router;

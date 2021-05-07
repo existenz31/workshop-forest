@@ -356,7 +356,7 @@
       "fields": [{
         "field": "Full Name",
         "type": "String",
-        "defaultValue": null,
+        "defaultValue": "Toto",
         "enums": null,
         "isRequired": true,
         "reference": null,
@@ -418,7 +418,7 @@
         "widget": null
       }],
       "hooks": {
-        "load": false,
+        "load": true,
         "change": []
       }
     }, {

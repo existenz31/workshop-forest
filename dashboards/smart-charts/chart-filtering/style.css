@@ -1,0 +1,45 @@
+.c-smart-chart {
+  display: flex;
+  white-space: normal;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  background-color: var(--color-beta-surface);
+}
+
+.c-smart-chart__content {
+  margin: auto;
+  text-align: center;
+  color: var(--color-beta-on-surface_medium);
+}
+
+.c-smart-chart__icon {
+  margin-bottom: 32px;
+  font-size: 64px;
+}
+
+/* Style the form - display items horizontally */
+.form-inline {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+
+/* Add some margins for each label */
+.form-inline label {
+  margin: 5px 10px 5px 10px;
+  min-width: 80px;
+  padding-bottom: 5px;
+  text-align: right;
+}
+
+.filter-select {
+  width: 130px;
+  margin-right: 10px;
+}
+
+/* Remove Chart Description margin */
+.c-dashcard__description {
+  margin-bottom: 5px;
+}

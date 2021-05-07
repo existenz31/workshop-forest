@@ -42,6 +42,11 @@ collection('customers', {
         type: 'String',
       }
     ],
+    hooks: {
+      load: ({ fields, record }) => {
+        return fields;
+      },
+    }
   },
   {
     name: 'Subscribe Basic Plan',
@@ -90,7 +95,8 @@ collection('customers', {
     {
       field: 'Full Name',
       type: 'String',
-      isRequired: true
+      isRequired: true,
+      defaultValue: 'Toto',
     },
     {
       field: 'Email',
