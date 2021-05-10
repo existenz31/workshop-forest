@@ -3,7 +3,7 @@ const router = express.Router();
 const Promise = require('bluebird');
 
 router.post('/api/smart-charts/chart-1', async (req, res) => {
-  getData().then((data) => {
+  getJsonData(req.body).then((data) => {
     res.send(data);
   })
 });
@@ -16,7 +16,7 @@ function rnd5() {
   return res<0?0:res;
 }
 
-function getData() {
+function getJsonData(params) {
   return new Promise(function (resolve, reject) {
     const data = {
       lines: [

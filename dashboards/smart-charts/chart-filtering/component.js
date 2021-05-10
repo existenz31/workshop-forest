@@ -10,7 +10,7 @@ export default class extends Component {
   filteringPeriod = 'this_month'
   periodOptions = [{name:'This Month', value:'this_month'}, {name:'Last Month', value:'last_week'}, {name:'Last Week', value:'last_month'}]
 
-  filteringOrigin = 2
+  filteringOrigin = 1 // default => use mock data to avoid wait the data fetch
   originOptions = [{name:'Mock Data', value: 1},{name:'API Data', value: 2}]
   
   constructor(...args) {

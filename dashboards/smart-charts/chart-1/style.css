@@ -24,14 +24,14 @@
   font-size: 64px;
 }
 
-.card.line1 {
+.card.col1 {
   background-color: rgba(238,247,232, 1);
 }
-.card.line2 {
+.card.col2 {
   background-color: rgba(227, 228, 244, 1);
 }
 
-.card.line3 {
+.card.col3 {
   background-color: rgba(251, 241, 228, 1);
 }
 
@@ -39,22 +39,9 @@ div.container {
   padding: 0;
 }
 
-p.total {
+p.card-total {
   font-size: 2.5em;
 }
-
-/*.card {
-  padding: 5px;
-  border: 1px solid grey;
-  border-radius: 5px;
-  margin: 5px;
-  display: inline-block;
-  
-}
-.col {
-  display: inline-block;
-  width: 0.3;
-}*/
 
 .grid {
   display: grid;
@@ -69,14 +56,14 @@ p.total {
   margin: 5px;  
   padding: 5px;
 }
-.card-title {
+h2.card-title {
  text-align: left; 
  padding-left: 10px;
 }
-div.block {
+div.card-block {
   display: inline-block;
 }
-.card-text {
+div.card-body {
   float: left;
   padding-left: 10px;
 }

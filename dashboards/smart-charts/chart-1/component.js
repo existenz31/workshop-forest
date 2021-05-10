@@ -12,43 +12,20 @@ export default class extends Component {
   
   @tracked data = {}
   
-  myChar = null
-  
-  mockData() {
-    return {
-      lines: [
-        {label: 'QR Code Scans', total: 288 + this.rnd10(), values: [0+this.rnd5(), 20+this.rnd5(), 20+this.rnd5(), 60+this.rnd5(), 60+this.rnd5(), 120+this.rnd5(), 150+this.rnd5(), 180+this.rnd5(), 120+this.rnd5(), 125+this.rnd5(), 105+this.rnd5(), 130+this.rnd5(), 150+this.rnd5()]},
-        {label: '# Borrowings', total: 304 + this.rnd10(), values: [0+this.rnd5(), 0+this.rnd5(), 0+this.rnd5(), 50+this.rnd5(), 50+this.rnd5(), 100+this.rnd5(), 130+this.rnd5(), 150+this.rnd5(), 150+this.rnd5(), 105+this.rnd5(), 90+this.rnd5(), 80+this.rnd5(), 70+this.rnd5()]},
-        {label: 'Clicks on website', total: 156 + this.rnd10(), values: [0+this.rnd5(), 0+this.rnd5(), 30+this.rnd5(), 40+this.rnd5(), 35+this.rnd5(), 90+this.rnd5(), 100+this.rnd5(), 100+this.rnd5(), 90+this.rnd5(), 90+this.rnd5(), 100+this.rnd5(), 110+this.rnd5(), 130+this.rnd5()]}
-      ],
-      xLabels: ['01-May', '02-May', '03-May', '04-May', '05-May', '06-May', '07-May', '08-May', '09-May', '10-May', '11-May', '12-May', '13-May'],
-      //yScale: {min: 20, max: 200}
-    }
-  }  
+  myChart = null
+
   
   constructor(...args) {
     super(...args);
+    // Start Listening the Filtering events
     this.listenEvent();
     this.loadPlugin();
     
-/*    this.fetchData({origin: 1}).then(() => {
-      this.loadPlugin();
-    })*/
-
-  }
-  
-  @action
-  async refresh() {
-    //console.log('refresh')
-    this.eventBus.trigger('filteringChangeEvent', {
-      period: 'last_month', 
-      origin: 2})
   }
   
   listenEvent() {
     this.eventBus.on('filteringChangeEvent', async (args) => {
-//      console.log("listen => " + JSON.stringify(args));
-      //console.log("listen => " + JSON.stringify(args));
+      // onChange event: fetch data then refresh the chart (rendering)
       this.fetchData(args).then(() => {
         this.renderChart();
       })
@@ -56,26 +33,16 @@ export default class extends Component {
   }
 
   async loadPlugin() {
-    //await loadExternalJavascript('https://cdn.jsdelivr.net/npm/chart.js');
-    //await loadExternalJavascript('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js');
     await loadExternalJavascript('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js');
-
     this.loaded = true;
-    this.renderChart()
+    //this.renderChart()
   }
 
-  rnd10() {
-    return Math.floor(Math.random() * 100)-50
-  }
-  
-  rnd5() {
-    let res = Math.floor(Math.random() * 80) - 30
-    return res<0?0:res;
-  }
-  
   async fetchData(args) {
     console.log('fetch => ' + args.origin)
+    // We fetch the data depending on the origin parameter    
     if (args.origin == 2) {
+      // Fetch the data from the API
       const response = await this.lianaServerFetch.fetch('/forest/api/smart-charts/chart-1', {
        method: 'POST',
        body: JSON.stringify(args)
@@ -83,29 +50,26 @@ export default class extends Component {
       this.data = await response.json();
     }
     else {
+      // Fetch the mocked data locally
       this.data = this.mockData();
     }
   }
   
 
-
-  @action
   async renderChart() {
     if (!this.loaded) { return; }
     var ctx = document.getElementById('myDiv-chartjs');
-    //console.log(ctx);
-    
-    var config = this.loadConfig();
+
     if (!this.myChart) {
+      // Chart is not yet created: let's build it      
+      var config = this.loadConfig();
       this.myChart = new Chart(ctx, config);
-      //this.myChart.destroy();
     }
     else {
-      //console.log("data" + this.data.lines[0].total)
+      // Chart already rendered: update its data      
       this.myChart.data = config.data;
       this.myChart.update();
     }
-//  this.myChart = new Chart(ctx, config);
   }
   
   loadConfig() {
@@ -168,7 +132,34 @@ export default class extends Component {
     };  
     return config;
   }
-}
 
-
+  @action
+  async refresh() {
+    //console.log('refresh')
+    this.eventBus.trigger('filteringChangeEvent', {
+      period: 'last_month', 
+      origin: 2})
+  }
     
+  mockData() {
+    return {
+      lines: [
+        {label: 'QR Code Scans', total: 288 + this.rnd10(), values: [0+this.rnd5(), 20+this.rnd5(), 20+this.rnd5(), 60+this.rnd5(), 60+this.rnd5(), 120+this.rnd5(), 150+this.rnd5(), 180+this.rnd5(), 120+this.rnd5(), 125+this.rnd5(), 105+this.rnd5(), 130+this.rnd5(), 150+this.rnd5()]},
+        {label: '# Borrowings', total: 304 + this.rnd10(), values: [0+this.rnd5(), 0+this.rnd5(), 0+this.rnd5(), 50+this.rnd5(), 50+this.rnd5(), 100+this.rnd5(), 130+this.rnd5(), 150+this.rnd5(), 150+this.rnd5(), 105+this.rnd5(), 90+this.rnd5(), 80+this.rnd5(), 70+this.rnd5()]},
+        {label: 'Clicks on website', total: 156 + this.rnd10(), values: [0+this.rnd5(), 0+this.rnd5(), 30+this.rnd5(), 40+this.rnd5(), 35+this.rnd5(), 90+this.rnd5(), 100+this.rnd5(), 100+this.rnd5(), 90+this.rnd5(), 90+this.rnd5(), 100+this.rnd5(), 110+this.rnd5(), 130+this.rnd5()]}
+      ],
+      xLabels: ['01-May', '02-May', '03-May', '04-May', '05-May', '06-May', '07-May', '08-May', '09-May', '10-May', '11-May', '12-May', '13-May'],
+      //yScale: {min: 20, max: 200}
+    }
+  }  
+  
+  rnd10() {
+    return Math.floor(Math.random() * 100)-50
+  }
+  
+  rnd5() {
+    let res = Math.floor(Math.random() * 80) - 30
+    return res<0?0:res;
+  }
+
+}
