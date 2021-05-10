@@ -60,9 +60,9 @@ export default class extends Component {
     if (!this.loaded) { return; }
     var ctx = document.getElementById('myDiv-chartjs');
 
+    var config = this.loadConfig();
     if (!this.myChart) {
       // Chart is not yet created: let's build it      
-      var config = this.loadConfig();
       this.myChart = new Chart(ctx, config);
     }
     else {
