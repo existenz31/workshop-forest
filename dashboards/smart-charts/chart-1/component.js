@@ -35,7 +35,7 @@ export default class extends Component {
   async loadPlugin() {
     await loadExternalJavascript('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js');
     this.loaded = true;
-    //this.renderChart()
+    this.renderChart()
   }
 
   async fetchData(args) {

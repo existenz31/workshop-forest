@@ -26,17 +26,17 @@ router.delete(`/${collectionName}/:recordId`, permissionMiddlewareCreator.delete
 
 // Get a list of Records
 router.get(`/${collectionName}`, permissionMiddlewareCreator.list(), async (request, response, next) => {
-  // next();
-  const recordsGetter = new RecordsGetter(models.customers);
-  recordsGetter.getAll(request.query)
-    .then(records => {
-      records.unshift({id: 0, name:'dummy'})
-      return recordsGetter.serialize(records)
-    })
-    .then(recordsSerialized => {
-      return response.send(recordsSerialized)
-    })
-    .catch(next);    
+  next();
+  // const recordsGetter = new RecordsGetter(models.customers);
+  // recordsGetter.getAll(request.query)
+  //   .then(records => {
+  //     records.unshift({id: 0, name:'dummy'})
+  //     return recordsGetter.serialize(records)
+  //   })
+  //   .then(recordsSerialized => {
+  //     return response.send(recordsSerialized)
+  //   })
+  //   .catch(next);    
 });
 
 // Get a number of Records
