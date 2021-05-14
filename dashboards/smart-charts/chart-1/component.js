@@ -10,7 +10,7 @@ export default class extends Component {
   
   @tracked loaded = false
   
-  @tracked data = {}
+  @tracked data = null
   
   myChart = null
 
@@ -20,7 +20,6 @@ export default class extends Component {
     // Start Listening the Filtering events
     this.listenEvent();
     this.loadPlugin();
-    
   }
   
   listenEvent() {
@@ -35,7 +34,7 @@ export default class extends Component {
   async loadPlugin() {
     await loadExternalJavascript('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js');
     this.loaded = true;
-    this.renderChart()
+    //this.renderChart();
   }
 
   async fetchData(args) {
@@ -62,7 +61,8 @@ export default class extends Component {
 
     var config = this.loadConfig();
     if (!this.myChart) {
-      // Chart is not yet created: let's build it      
+      // Chart is not yet created: let's build it   
+      Chart.defaults.global.defaultFontFamily = 'Inconsolata';
       this.myChart = new Chart(ctx, config);
     }
     else {

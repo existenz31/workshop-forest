@@ -6,8 +6,8 @@
   right: 0;
   top: 0;
   background-color: var(--color-beta-surface);
-  height: 420px;
-
+  width: 100%;
+  height: calc(100% - 110px);
 }
 
 .c-smart-chart__content {

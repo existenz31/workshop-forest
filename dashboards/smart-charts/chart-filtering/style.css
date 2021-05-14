@@ -30,7 +30,7 @@
 /* Add some margins for each label */
 .form-inline label {
   margin: 5px 10px 5px 10px;
-  min-width: 80px;
+  min-width: 90px;
   padding-bottom: 5px;
   text-align: right;
 }
@@ -38,9 +38,14 @@
 .filter-select {
   width: 130px;
   margin-right: 10px;
+  margin-bottom: 3px;
 }
 
 /* Remove Chart Description margin */
 .c-dashcard__description {
   margin-bottom: 5px;
+}
+text *
+{
+   font-family: Arial !important;
 }

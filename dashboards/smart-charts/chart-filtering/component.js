@@ -15,6 +15,8 @@ export default class extends Component {
   
   constructor(...args) {
     super(...args);
+    var that = this;
+    setTimeout(() => {  that.triggerEvent(); }, 300); // Wait x ms to triggerEvent
   }
   
   @action
